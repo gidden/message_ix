@@ -54,3 +54,7 @@ tests/testdb/test.properties
 tests/testdb/ixmptest.properties
 tests/testdb/ixmptest.lck
 .Rproj.user
+
+message_ix/model/MESSAGE/workflow_modification\.gms
+
+message_ix/model/cplex\.opt
