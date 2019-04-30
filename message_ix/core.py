@@ -21,15 +21,38 @@ DEFAULT_SOLVE_OPTIONS = {
 }
 
 
+def init_storage(scen, *args, **kwargs):
+    # Initiating a set to specifiy storage level (no commodity balance needed)
+    scen.init_set('level_storage')
+
+    # Initiating a set to specifiy storage reservoir technology
+    scen.init_set('storage_tec')
+
+    # Initiating a set to map storage reservoir to its charger/discharger
+    scen.init_set('map_tec_storage', idx_sets=['technology', 'storage_tec'])
+
+    # Initiating a parameter to specify the order of sub-annual time steps
+    scen.init_par('time_seq', idx_sets=['time'])
+
+    # Initiating two parameters for specifying lower and upper bounds of
+    # storage reservoir as percentage of installed reservoir capacity
+    par_list_stor = ['bound_storage_lo', 'bound_storage_up']
+    for parname in par_list_stor:
+        scen.init_par(parname, idx_sets=['node', 'technology', 'commodity',
+                                         'level', 'year', 'time'])
+    # Initiating a parameter for specifying storage losses (percentage)
+    scen.init_par('storage_loss', idx_sets=['node', 'technology', 'commodity',
+                                            'level', 'year', 'time'])
+
+
 def _init_scenario(s, commit=False):
     """Initialize a MESSAGEix Scenario object with default values"""
     inits = (
-        # {
-        #  'test': False  # some test,
-        #  'exec': [(pass, {'args': ()}), ],
-        # },
+        {
+            'test': 'level_storage' not in s.set_list(),
+            'exec': [(init_storage, {'args': (s,)}), ],
+        },
     )
-
     pass_idx = [i for i, init in enumerate(inits) if init['test']]
     if len(pass_idx) == 0:
         return  # leave early, all init tests pass
