@@ -363,7 +363,10 @@ class Calculate(object):
 
 def init(s):
     for key, values in MACRO_INIT['sets'].items():
-        s.init_set(key, values)
+        try:
+            s.init_set(key, values)
+        except:
+            pass
     for key, values in MACRO_INIT['pars'].items():
         try:
             s.init_par(key, values['idx'])
