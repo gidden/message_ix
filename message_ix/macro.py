@@ -351,14 +351,20 @@ class Calculate(object):
         return self.data['aconst']
 
 
+def remove(s):
+    for key in MACRO_INIT['sets']:
+        if key in s.set_list():
+            s.remove_set(key)
+    for key in MACRO_INIT['pars']:
+        if key in s.par_list():
+            s.remove_par(key)
+
+
 def init(s):
     for key, values in MACRO_INIT['sets'].items():
         s.init_set(key, values)
     for key, values in MACRO_INIT['pars'].items():
-        try:
-            s.init_par(key, values['idx'])
-        except:  # noqa: ignore=E722
-            pass  # already exists in the model, known for 'historical_gdp'
+        s.init_par(key, values['idx'])
     for key, values in MACRO_INIT['vars'].items():
         if not s.has_var(key):
             try:

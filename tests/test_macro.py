@@ -188,6 +188,7 @@ def test_init(test_mp):
 
     scen = scen.clone('foo', 'bar')
     scen.check_out()
+    macro.remove(scen)
     macro.init(scen)
     scen.commit('foo')
     scen.solve()
